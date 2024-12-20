@@ -97,6 +97,13 @@ fn bench_self_eq(c: &mut Criterion) {
             let copy = criterion::black_box(copy);
             b.iter(|| uut == copy)
         });
+        group.bench_with_input(BenchmarkId::new("LeanString::from", len), &len, |b, _| {
+            let uut = lean_string::LeanString::from(*fixture);
+            let uut = criterion::black_box(uut);
+            let copy = uut.clone();
+            let copy = criterion::black_box(copy);
+            b.iter(|| uut == copy)
+        });
         group.bench_with_input(
             BenchmarkId::new("KString::from_string", len),
             &len,
@@ -186,6 +193,17 @@ fn bench_self_eq_static(c: &mut Criterion) {
             &len,
             |b, _| {
                 let uut = kstring::KString::from_static(*fixture);
+                let uut = criterion::black_box(uut);
+                let copy = uut.clone();
+                let copy = criterion::black_box(copy);
+                b.iter(|| uut == copy)
+            },
+        );
+        group.bench_with_input(
+            BenchmarkId::new("LeanString::from_static_str", len),
+            &len,
+            |b, _| {
+                let uut = lean_string::LeanString::from_static_str(*fixture);
                 let uut = criterion::black_box(uut);
                 let copy = uut.clone();
                 let copy = criterion::black_box(copy);
